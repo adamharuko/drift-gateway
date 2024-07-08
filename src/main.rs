@@ -267,7 +267,7 @@ async fn main() -> std::io::Result<()> {
     let client = Box::leak(Box::new(Arc::clone(state.client.borrow())));
     websocket::start_ws_server(
         format!("{}:{}", &config.host, config.ws_port).as_str(),
-        config.rpc_host.replace("http", "ws"),
+        config.rpc_ws_host,
         state.wallet.clone(),
         client.program_data(),
     )
@@ -358,6 +358,9 @@ struct GatewayConfig {
     /// the solana RPC URL
     #[argh(positional)]
     rpc_host: String,
+    /// RPC Ws port
+    #[argh(option, default = "String::from(\"127.0.0.1\")")]
+    rpc_ws_host: String,
     /// run in devnet mode
     #[argh(switch)]
     dev: bool,
